@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World!</title>
+    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="./output.css">
+  </head>
+  <body>
+    
+    
+    <div class="container mx-auto px-4 w-11/12 p-3">
+      <div class="navbar bg-base-100 shadow rounded-lg w-full mx-auto mb-10">
+        <a class="btn btn-ghost text-xl">PSM DB Printer Server</a>
+      </div>
+      
+      <div class="container p-5">
+        <div class="flex align-center gap-4">
+          <select class="select select-bordered endpoint_status_select w-96">
+            <option value="dev">Development</option>
+            <option value="prod">Production</option>
+          </select>
+          <button class="btn " id="endpoint_status_set_btn">Set Endpoint</button>
+  
+          <div class="flex items-center justify-center p-3 border border-slate-300 rounded-lg w-fit transition-all">
+            <p class="endpoint_status_text text-no-wrap w-max"></p>
+          </div>
+  
+        </div>
+  
+        <div class="flex align-center gap-4 my-5">
+          <div class="py-3 px-5  border rounded-lg border-slate-300">
+            <p>Server Status : </p> 
+          </div>
+  
+          <div class="flex items-center justify-center p-3 border border-slate-300 rounded-lg">
+            <div class="w-6 h-6 bg-red-500 rounded-full server_status_led">
+  
+            </div>
+          </div>
+  
+          <button id="server_status_btn" class="btn">Start Server</button>
+        
+        </div>
+
+        <div class="mockup-code bg-neutral text-neutral-content transition-all h-60">
+          <pre><code class="error_codes_text"></code></pre>
+        </div>
+
+      </div>
+
+    </div>
+  </body>
+  <script src="./client.js"></script>
+</html>
