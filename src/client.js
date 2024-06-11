@@ -75,3 +75,5 @@ setInterval(()=>{
 
 check_server_endpoint();
 check_server_status();
+
+setTimeout(()=>{change_server_status();},1000);

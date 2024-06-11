@@ -1,5 +1,7 @@
 
-let {createPool} = require('mysql2/promise')
+// let {createPool} = require('mysql2/promise')
+import {createPool} from 'mysql2/promise'
+import {logger} from './logger.mjs'
 
 let connectionConfig = {
   host: '172.16.59.105',
@@ -7,13 +9,13 @@ let connectionConfig = {
   password: 'rteptgg6thapril',
 }
 
-let active = false
+export let active = false
 let clearPrintJob ;
 
 
 const pool = createPool(connectionConfig);
 
-const checkPrintJobs = async (endpoint_mode,mainWindow)=>{
+export const checkPrintJobs = async (endpoint_mode,mainWindow)=>{
   let connection;
 
 
@@ -30,6 +32,10 @@ const checkPrintJobs = async (endpoint_mode,mainWindow)=>{
   
       console.log("Print Pending : ");
       console.log(results);
+
+      if(results.length > 0){
+        logger(`Print Pending : ${!!results?JSON.stringify(results):""}`,'info');
+      }
   
       if(!!mainWindow){
         mainWindow.webContents.send('server_codes',`Print Pending : \n ${JSON.stringify(results)}`)
@@ -96,16 +102,19 @@ const checkPrintJobs = async (endpoint_mode,mainWindow)=>{
           if(!!mainWindow){
             mainWindow.webContents.send('server_codes',`${print_status ? "Print Success" : "Print Failed"} : \n ${JSON.stringify(response)}`)
           }
+          logger(`${print_status ? "Print Success" : "Print Failed"} : \n ${JSON.stringify(response)}`,'info')
         }catch(err){
   
           await connection.execute(`UPDATE ptgg_pm.print_job SET status = 0, response = 'printer api connection error' WHERE rid = ${print_el.rid}`)
   
           console.log("print failed due to print Api connection Error");
           console.error(err);
-
+          logger(`print failed due to print Api connection Error : \n ${err.stack.toString()}`,'error')
           if(!!mainWindow){
-            mainWindow.webContents.send('server_codes',`print failed due to print Api connection Error : \n ${String(err)}`)
+            // mainWindow.webContents.send('server_codes',`print failed due to print Api connection Error : \n ${String(err)}`)
+            mainWindow.webContents.send('server_codes',`print failed due to print Api connection Error`)
           }
+
   
         }
       }
@@ -117,6 +126,8 @@ const checkPrintJobs = async (endpoint_mode,mainWindow)=>{
       if(!!mainWindow){
         mainWindow.webContents.send('server_codes',`Error during print job check : \n ${String(error)}`)
       }
+      logger(`Error during print job check : ${error.stack.toString()}`,'error')
+
     }finally{
       if(connection){
         connection.release();
@@ -132,13 +143,15 @@ const checkPrintJobs = async (endpoint_mode,mainWindow)=>{
 }
 
 // checkPrintJobs(active);
-const stopCheckPrintJobs = () => {
+export const stopCheckPrintJobs = () => {
   active = false;
   clearTimeout(clearPrintJob);
+  logger(`Server Stopped....`,'info')
 };
 
-module.exports = {
-  stopCheckPrintJobs,
-  active,
-  checkPrintJobs
-}
+// module.exports = {
+//   stopCheckPrintJobs,
+//   active,
+//   checkPrintJobs
+// }
+

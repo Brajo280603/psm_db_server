@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "description": "My Electron application description",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
@@ -33,6 +34,7 @@
   "dependencies": {
     "@tailwindcss/typography": "^0.5.13",
     "electron-squirrel-startup": "^1.0.1",
+    "electron-store": "^9.0.0",
     "mysql2": "^3.10.0"
   }
 }
