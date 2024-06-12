@@ -6,6 +6,7 @@ import { FuseV1Options, FuseVersion } from '@electron/fuses';
 
 export const packagerConfig = {
   asar: true,
+  // icon: '/src/static/wzt_icon'
 };
 export const rebuildConfig = {};
 export const makers = [

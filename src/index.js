@@ -3,7 +3,7 @@
 // const {active,checkPrintJobs, stopCheckPrintJobs} = require('./server');
 // const Store = require("electron-store");
 
-import {app,BrowserWindow, nativeTheme , ipcMain} from 'electron'
+import {app,BrowserWindow, nativeTheme , ipcMain, Tray,Menu} from 'electron'
 import path from 'node:path'
 import {active, checkPrintJobs, stopCheckPrintJobs} from './server.mjs'
 import Store from 'electron-store';
@@ -37,6 +37,7 @@ const createWindow = () => {
       devTools: false, //remove devtools from application
     },
     show: false,
+    icon:path.join(__dirname,'/static/wzt_icon.ico')
   });
 
   mainWindow.show();
@@ -46,6 +47,55 @@ const createWindow = () => {
   // Open the DevTools.
 
   nativeTheme.themeSource = 'light'
+
+
+
+  let tray = null;
+
+let createTray = ()=>{
+  let appIcon = new Tray(path.join(__dirname,"/static/wzt_icon.ico"));
+
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Show' , click: ()=>{
+        mainWindow.show()
+      }
+    },
+    {
+      label: 'Exit', click: ()=>{
+        app.isQuiting = true;
+        app.quit();
+      }
+    }
+  ]);
+
+
+
+
+
+
+  appIcon.on('double-click', event=>{
+    mainWindow.show();
+  })
+
+  appIcon.setToolTip('PSM DB Print Server');
+  appIcon.setContextMenu(contextMenu);
+
+  return appIcon;
+}
+
+mainWindow.on('minimize',(event)=>{
+  event.preventDefault();
+  mainWindow.hide();
+  tray = createTray();
+  console.log("minimize")
+});
+
+mainWindow.on("restore",()=>{
+  mainWindow.show();
+  tray.destroy();
+})
+
 
   return mainWindow
 };
@@ -77,6 +127,8 @@ app.on('window-all-closed', () => {
 
 
 });
+
+
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
