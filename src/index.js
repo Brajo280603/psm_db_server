@@ -89,6 +89,7 @@ mainWindow.on('minimize',(event)=>{
   mainWindow.hide();
   tray = createTray();
   console.log("minimize")
+  logger("app minimized",'info')
 });
 
 mainWindow.on("restore",()=>{
