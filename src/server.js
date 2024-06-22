@@ -52,15 +52,23 @@ const checkPrintJobs = async (endpoint_mode,mainWindow)=>{
         // console.log(print_data)
       
         
-        let print_body = {
-          product: String(print_data.body.product),
-          spec: String(print_data.body.spec),
-          dimension: String(print_data.body.dimension),
-          heat: String(print_data.body.heat),
-          batch: String(print_data.body.batch),
-          qty: String(print_data.body.qty),
-          weight: String(print_data.body.weight),
-        };
+        // let print_body = {
+        //   product: String(print_data.body.product),
+        //   spec: String(print_data.body.spec),
+        //   dimension: String(print_data.body.dimension),
+        //   heat: String(print_data.body.heat),
+        //   batch: String(print_data.body.batch),
+        //   qty: String(print_data.body.qty),
+        //   weight: String(print_data.body.weight),
+        // };
+
+        //now can add any number of props
+        let print_body = {}
+        for(let prop in print_data.body){
+          print_body[prop] = String(print_data.body[prop]);
+        }
+
+        console.log(print_body)
       
         let end_points = {
           type: String(print_data.end_point.type),
