@@ -4,7 +4,6 @@
   "version": "1.0.0",
   "description": "My Electron application description",
   "main": "src/index.js",
-  "type": "module",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
@@ -22,19 +21,24 @@
     "@electron-forge/plugin-fuses": "^7.4.0",
     "@electron/fuses": "^1.8.0",
     "daisyui": "^4.12.2",
-    "electron": "30.1.0",
+    "electron": "^22.3.27",
+    "electron-wix-msi": "^5.1.3",
     "tailwindcss": "^3.4.4"
   },
   "keywords": [],
   "author": {
-    "name": "Brajananda Mahata",
-    "email": "brajanandamahato280603@gmail.com"
+    "name": "Wissen Zentrum Technology",
+    "email": "wzt@wissenzentrum.com"
   },
   "license": "MIT",
   "dependencies": {
+    "@electron-forge/maker-wix": "^7.4.0",
     "@tailwindcss/typography": "^0.5.13",
+    "electron-builder": "^24.13.3",
+    "electron-json-storage": "^4.6.0",
     "electron-squirrel-startup": "^1.0.1",
     "electron-store": "^9.0.0",
-    "mysql2": "^3.10.0"
+    "mysql2": "^3.10.0",
+    "node-fetch": "^2.7.0"
   }
 }

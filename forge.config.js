@@ -1,22 +1,28 @@
-// const { FusesPlugin } = require('@electron-forge/plugin-fuses');
-// const { FuseV1Options, FuseVersion } = require('@electron/fuses');
-import { FusesPlugin } from '@electron-forge/plugin-fuses';
-import { FuseV1Options, FuseVersion } from '@electron/fuses';
+const { FusesPlugin } = require('@electron-forge/plugin-fuses');
+const { FuseV1Options, FuseVersion } = require('@electron/fuses');
+// import { FusesPlugin } from '@electron-forge/plugin-fuses';
+// import { FuseV1Options, FuseVersion } from '@electron/fuses';
 
 
-export const packagerConfig = {
+// export const packagerConfig = {
+ const packagerConfig = {
   asar: true,
-  // icon: '/src/static/wzt_icon'
+  icon: './src/static/wzt_icon.ico'
 };
-export const rebuildConfig = {};
-export const makers = [
+// export const rebuildConfig = {};
+ const rebuildConfig = {};
+// export const makers = [
+ const makers = [
   {
     name: '@electron-forge/maker-squirrel',
-    config: {},
+    config: {
+      icon:'./src/static/wzt_icon.ico',
+      setupIcon:'./src/static/wzt_icon.ico',
+    },
   },
   {
     name: '@electron-forge/maker-zip',
-    platforms: ['darwin'],
+    // platforms: ['darwin'],
   },
   {
     name: '@electron-forge/maker-deb',
@@ -26,8 +32,10 @@ export const makers = [
     name: '@electron-forge/maker-rpm',
     config: {},
   },
+
 ];
-export const plugins = [
+// export const plugins = [
+ const plugins = [
   {
     name: '@electron-forge/plugin-auto-unpack-natives',
     config: {},
@@ -44,3 +52,7 @@ export const plugins = [
     [FuseV1Options.OnlyLoadAppFromAsar]: true,
   }),
 ];
+
+module.exports = {
+  packagerConfig,rebuildConfig,makers,plugins
+}

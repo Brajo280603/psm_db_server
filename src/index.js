@@ -1,25 +1,34 @@
-// const { app, BrowserWindow,nativeTheme,ipcMain, } = require('electron');
-// const path = require('node:path');
-// const {active,checkPrintJobs, stopCheckPrintJobs} = require('./server');
-// const Store = require("electron-store");
+const {app,BrowserWindow,nativeTheme,ipcMain , Tray, Menu} = require('electron')
+const path = require('node:path')
 
-import {app,BrowserWindow, nativeTheme , ipcMain, Tray,Menu} from 'electron'
-import path from 'node:path'
-import {active, checkPrintJobs, stopCheckPrintJobs} from './server.mjs'
-import Store from 'electron-store';
+const {active, checkPrintJobs, stopCheckPrintJobs} = require("./server.js")
 
-import { fileURLToPath } from 'node:url';
-import { logger } from './logger.mjs';
+const {fileURLToPath} = require("node:url")
+const {logger} = require("./logger.js")
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const os = require("os")
+const electron_store = require('electron-json-storage')
 
-const electron_store = new Store();
+// electron_store.setDataPath(os.tmpdir());
 
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-// if (require('electron-squirrel-startup')) {
-//   app.quit();
-// }
+electron_store.setDataPath(electron_store.getDefaultDataPath())
+
+console.log(electron_store.getDataPath())
+console.log(electron_store.getDefaultDataPath())
+// import {app,BrowserWindow, nativeTheme , ipcMain, Tray,Menu} from 'electron'
+// import path from 'node:path'
+// import {active, checkPrintJobs, stopCheckPrintJobs} from './server.js'
+// import Store from 'electron-store';
+
+
+// import { fileURLToPath } from 'node:url';
+// import { logger } from './logger.mjs';
+
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// const electron_store = new Store();
+
 
 let mainWindow ;
 
@@ -59,11 +68,13 @@ let createTray = ()=>{
     {
       label: 'Show' , click: ()=>{
         mainWindow.show()
+        logger("app maximized",'info')
       }
     },
     {
       label: 'Exit', click: ()=>{
         app.isQuiting = true;
+        logger("app Closed",'info')
         app.quit();
       }
     }
@@ -76,6 +87,7 @@ let createTray = ()=>{
 
   appIcon.on('double-click', event=>{
     mainWindow.show();
+    logger("app maximized",'info')
   })
 
   appIcon.setToolTip('PSM DB Print Server');
@@ -94,6 +106,7 @@ mainWindow.on('minimize',(event)=>{
 
 mainWindow.on("restore",()=>{
   mainWindow.show();
+  logger("app maximized",'info')
   tray.destroy();
 })
 
@@ -123,6 +136,7 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
   logger("Application Closed","info");
   if (process.platform !== 'darwin') {
+    logger("app Closed",'info')
     app.quit();
   }
 
@@ -135,17 +149,38 @@ app.on('window-all-closed', () => {
 // code. You can also put them in separate files and import them here.
 
 let endpoint_mode ='dev';
-endpoint_mode = electron_store.get("endpoint_mode") ?? endpoint_mode;
+// endpoint_mode = electron_store.get("endpoint_mode") ?? endpoint_mode;
+try{
+  endpoint_mode = electron_store.getSync("endpoint_mode")?.endpoint_mode ?? endpoint_mode;
+}catch(err){
+
+}
+
+
+
+
 
 ipcMain.handle('get_endpoint',(event,value)=>{
-  endpoint_mode = electron_store.get("endpoint_mode") ?? endpoint_mode;
+  // endpoint_mode = electron_store.get("endpoint_mode") ?? endpoint_mode;
+
+  try{
+    endpoint_mode = electron_store.getSync("endpoint_mode")?.endpoint_mode ?? endpoint_mode;
+  }catch(err){
+  
+  }
   return endpoint_mode
 })
 
 ipcMain.on('set_endpoint',(event,value)=>{
   endpoint_mode = value
-  logger(`Endpoint Changed from {${electron_store.get("endpoint_mode")}} to {${endpoint_mode}}`,'info')
-  electron_store.set("endpoint_mode",endpoint_mode);
+  // logger(`Endpoint Changed from {${electron_store.get("endpoint_mode")}} to {${endpoint_mode}}`,'info')
+  try{
+    logger(`Endpoint Changed from {${electron_store.getSync("endpoint_mode")?.endpoint_mode}} to {${endpoint_mode}}`,'info')
+  }catch(err){
+    
+  }
+  // electron_store.set("endpoint_mode",endpoint_mode);
+  electron_store.set("endpoint_mode",{"endpoint_mode":endpoint_mode});
   
 })
 
