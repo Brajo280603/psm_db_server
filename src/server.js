@@ -85,7 +85,7 @@ const checkPrintJobs = async (endpoint_mode,mainWindow)=>{
         }
 
         console.log(print_body,end_points)
-        logger(`\nprint_body : ${print_body} \n\endpoints : ${end_points}\n`,'info')
+        logger(`\nprint_body : ${JSON.stringify(print_body)} \n\endpoints : ${JSON.stringify(end_points)}\n`,'info')
         
         let post_req = {
           method: 'POST',
