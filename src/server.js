@@ -68,12 +68,23 @@ const checkPrintJobs = async (endpoint_mode,mainWindow)=>{
           print_body[prop] = String(print_data.body[prop]);
         }
 
-        console.log(print_body)
+        // console.log(print_body)
       
-        let end_points = {
-          type: String(print_data.end_point.type),
-          printerIP: String(print_data.end_point.printerIP),
-        };
+
+       
+
+
+        // let end_points = {
+        //   type: String(print_data.end_point.type),
+        //   printerIP: String(print_data.end_point.printerIP),
+        // };
+
+        let end_points = {}
+        for (prop in print_data.end_point){
+          end_points[prop] = String(print_data.end_point[prop]);
+        }
+
+        logger(`\nprint_body : ${print_body} \n\endpoints : ${end_points}\n`,'info')
         
         let post_req = {
           method: 'POST',
