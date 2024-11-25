@@ -32,8 +32,11 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@electron-forge/maker-base": "^7.4.0",
     "@electron-forge/maker-wix": "^7.4.0",
+    "@electron-forge/shared-types": "^7.4.0",
     "@tailwindcss/typography": "^0.5.13",
+    "auto-launch": "^5.0.6",
     "electron-builder": "^24.13.3",
     "electron-json-storage": "^4.6.0",
     "electron-squirrel-startup": "^1.0.1",

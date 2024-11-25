@@ -7,7 +7,7 @@ const {logger} = require("./logger")
 const fetch = require('node-fetch')
 
 let connectionConfig = {
-  host: '172.16.20.18',
+  host: '172.16.59.105',
   user: 'root',
   password: 'rteptgg6thapril',
 }

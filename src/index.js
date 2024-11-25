@@ -1,6 +1,12 @@
 const {app,BrowserWindow,nativeTheme,ipcMain , Tray, Menu} = require('electron')
 const path = require('node:path')
 
+const AutoLaunch = require('auto-launch')
+
+const psm_printer_server_autolauncher = new AutoLaunch({
+  name : "psm_db_server"
+})
+
 const {active, checkPrintJobs, stopCheckPrintJobs} = require("./server.js")
 
 const {fileURLToPath} = require("node:url")
@@ -10,6 +16,17 @@ const os = require("os")
 const electron_store = require('electron-json-storage')
 
 // electron_store.setDataPath(os.tmpdir());
+
+
+psm_printer_server_autolauncher.isEnabled().then((isEnabled)=>{
+    if(!isEnabled){
+      psm_printer_server_autolauncher.enable();
+      logger('AutoStart Enabled','info');
+    }
+}).catch(err=>{
+    logger('AutoStart Error','error');
+})
+
 
 electron_store.setDataPath(electron_store.getDefaultDataPath())
 
@@ -58,7 +75,6 @@ const createWindow = () => {
   nativeTheme.themeSource = 'light'
 
 
-
   let tray = null;
 
 let createTray = ()=>{
@@ -99,6 +115,7 @@ let createTray = ()=>{
 mainWindow.on('minimize',(event)=>{
   event.preventDefault();
   mainWindow.hide();
+  mainWindow.setSkipTaskbar(true);
   tray = createTray();
   console.log("minimize")
   logger("app minimized",'info')
@@ -106,6 +123,7 @@ mainWindow.on('minimize',(event)=>{
 
 mainWindow.on("restore",()=>{
   mainWindow.show();
+  mainWindow.setSkipTaskbar(false)
   logger("app maximized",'info')
   tray.destroy();
 })
@@ -128,6 +146,11 @@ app.whenReady().then(() => {
       createWindow();
     }
   });
+
+  
+  mainWindow.minimize();
+  mainWindow.setSkipTaskbar(true);
+
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
